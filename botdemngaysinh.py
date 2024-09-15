@@ -1,29 +1,27 @@
 import telebot
 import requests
 
-# Thay thế 'YOUR_TELEGRAM_BOT_TOKEN' bằng token của bạn
-TOKEN = '6380919096:AAGcL0HmiJ2ynJaHoGj-4sOLgquQS6g9208'
+# Anh em thay thế api token ở đây nhó
+TOKEN = 'API TOKEN BOT NẰM ĐÂY'
 bot = telebot.TeleBot(TOKEN)
 
 @bot.message_handler(commands=['start'])
 def start(message):
-    bot.reply_to(message, 'Xin chào! Gửi cho gửi cho tao cái ngày sinh địa chỉ exampp: /sinhngay 10/9/2007')
-
+    bot.reply_to(message, 'Xin chào! Gửi cho gửi cho tao cái ngày sinh địa chỉ vd: /sinhngay 10/9/2007')
+# dev by thanhsangdev
 @bot.message_handler(commands=['sinhngay'])
 def get_date_info(message):
-    # Tách ngày từ tin nhắn
     if len(message.text.split()) < 2:
-        bot.reply_to(message, 'Gửi cho tao cái ngày sinh địa chỉ exampp: /sinhngay 10/9/2007')
+        bot.reply_to(message, 'Gửi cho tao cái ngày sinh địa chỉ vd: /sinhngay 10/9/2007')
         return
 
     date = message.text.split(maxsplit=1)[1]
     try:
         response = requests.get(f'https://api.sumiproject.net/date?date={date}')
-        response.raise_for_status()  # Kiểm tra lỗi HTTP
+        response.raise_for_status() 
 
         data = response.json()
 
-        # Xử lý dữ liệu theo cấu trúc đã cung cấp
         if 'years' in data:
             details = (
                 f"Thông tin ngày:\n"
@@ -37,7 +35,7 @@ def get_date_info(message):
             )
             bot.reply_to(message, details)
         else:
-            bot.reply_to(message, 'No data found for this date.')
+            bot.reply_to(message, 'dữ liệu không được dẫn đến.')
 
     except requests.RequestException as e:
         bot.reply_to(message, f'An error occurred: {e}')
